@@ -1,0 +1,5 @@
+{
+	"NavigationType": "Cross",
+	"PageToOpen": "/test/Pages/TaskList.page",
+	"_Type": "Action.Type.Navigation"
+}

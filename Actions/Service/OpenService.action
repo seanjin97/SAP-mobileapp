@@ -1,0 +1,9 @@
+{
+	"ActionResult": {
+		"_Name": "init"
+	},
+	"OnFailure": "/test/Actions/Service/CreateOpenServiceFailureMessage.action",
+	"OnSuccess": "/test/Actions/Service/CreateOpenServiceSuccessMessage.action",
+	"Service": "/test/Services/test.service",
+	"_Type": "Action.Type.ODataService.Open"
+}

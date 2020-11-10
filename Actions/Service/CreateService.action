@@ -1,0 +1,11 @@
+{
+	"ActionResult": {
+		"_Name": "init"
+	},
+	"ActivityIndicatorText": "Initializing Application...",
+	"OnFailure": "/test/Actions/Service/CreateOpenServiceFailureMessage.action",
+	"OnSuccess": "/test/Actions/Service/OpenService.action",
+	"Service": "/test/Services/test.service",
+	"ShowActivityIndicator": true,
+	"_Type": "Action.Type.ODataService.Create"
+}

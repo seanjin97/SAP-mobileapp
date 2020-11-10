@@ -1,0 +1,66 @@
+{
+	"ActionBar": {
+		"Items": [
+			{
+				"Icon": "sap-icon://accept",
+				"IsIconCircular": false,
+				"OnPress": "/test/Actions/Delivery_Confirmation.action",
+				"Position": "right",
+				"Text": "Item",
+				"Visible": true
+			}
+		]
+	},
+	"Caption": "Task Details",
+	"Controls": [
+		{
+			"Sections": [
+				{
+					"ObjectHeader": {
+						"BodyText": "{beneficiary/postcode}",
+						"DetailImageIsCircular": false,
+						"Footnote": "{beneficiary/address}",
+						"HeadlineText": "{beneficiary/beneficiaryID}",
+						"StatusText": "{deliverStatus}",
+						"Subhead": "{beneficiary/dietaryRestrictions}",
+						"Target": {
+							"EntitySet": "Task",
+							"QueryOptions": "$expand=beneficiary&$filter=beneficiary_beneficiaryID eq 'bene001'",
+							"Service": "/test/Services/test.service"
+						}
+					},
+					"Visible": true,
+					"_Name": "SectionObjectHeader0",
+					"_Type": "Section.Type.ObjectHeader"
+				},
+				{
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"HighlightSelectedItem": false,
+					"ObjectCell": {
+						"AccessoryType": "none",
+						"DetailImageIsCircular": false,
+						"Footnote": "Basket {basket/BasketID}",
+						"PreserveIconStackSpacing": false,
+						"StatusText": "{quantity}",
+						"Subhead": "Food Preset: {basket/name}",
+						"Title": "{stock_stock_name}"
+					},
+					"Target": {
+						"EntitySet": "FoodBasket",
+						"QueryOptions": "$expand=basket&$filter=basket_BasketID eq '01'",
+						"Service": "/test/Services/test.service"
+					},
+					"Visible": true,
+					"_Name": "TaskDetails",
+					"_Type": "Section.Type.ObjectTable"
+				}
+			],
+			"_Name": "SectionedTable0",
+			"_Type": "Control.Type.SectionedTable"
+		}
+	],
+	"_Name": "TaskDetails",
+	"_Type": "Page"
+}

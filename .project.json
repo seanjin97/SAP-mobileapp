@@ -1,0 +1,34 @@
+{
+	"Credential": "cf",
+	"CF": {
+		"Target": "https://api.cf.us10.hana.ondemand.com",
+		"Organization": "96d4a4ef-525a-4b6e-b02c-3d431e447aae",
+		"Space": "ddeb3b37-c169-4f88-a23b-5c5db293bc94",
+		"Deploy": {
+			"WebClient": {
+				"AutoUrl": true,
+				"Version": "",
+				"StaticUrl": ""
+			},
+			"Destination": [
+				{
+					"CF": "",
+					"MDK": "onecharitysg",
+					"URL": ""
+				}
+			]
+		}
+	},
+	"MobileService": {
+		"AdminAPI": "https://mobile-service-cockpit-api.cfapps.us10.hana.ondemand.com/cockpit/v1/org/96d4a4ef-525a-4b6e-b02c-3d431e447aae/space/ddeb3b37-c169-4f88-a23b-5c5db293bc94",
+		"AppId": "com.sap.onecharitysg",
+		"Destination": [
+			"onecharitysg"
+		]
+	},
+	"Onboarding": {
+		"Schema": "sapmobilesvcs",
+		"TimeZone": "UTC",
+		"URL": "sapmobilesvcs://?AppId=com.sap.onecharitysg&ClientId=d74ee431-b20b-435a-8580-a5dc31e31b98&SapCloudPlatformEndpoint=https://smucf-dev-com-sap-onecharitysg.cfapps.us10.hana.ondemand.com&AuthorizationEndpointUrl=https://smucf-dev-com-sap-onecharitysg.cfapps.us10.hana.ondemand.com/oauth2/api/v1/authorize&RedirectUrl=https://smucf-dev-com-sap-onecharitysg.cfapps.us10.hana.ondemand.com&TokenUrl=https://smucf-dev-com-sap-onecharitysg.cfapps.us10.hana.ondemand.com/oauth2/api/v1/token"
+	}
+}

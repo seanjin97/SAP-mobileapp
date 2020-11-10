@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="api" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="Basket" EntityType="api.Basket">
+          <NavigationPropertyBinding Path="stocks" Target="FoodBasket"/>
+        </EntitySet>
+        <EntitySet Name="Beneficiary" EntityType="api.Beneficiary">
+          <NavigationPropertyBinding Path="regionID" Target="Region"/>
+          <NavigationPropertyBinding Path="Stocks" Target="BeneficiaryStock"/>
+          <NavigationPropertyBinding Path="org" Target="Charity"/>
+        </EntitySet>
+        <EntitySet Name="BeneficiaryStock" EntityType="api.BeneficiaryStock">
+          <NavigationPropertyBinding Path="beneficiary" Target="Beneficiary"/>
+          <NavigationPropertyBinding Path="stock" Target="Stock"/>
+        </EntitySet>
+        <EntitySet Name="CharitiesRegions" EntityType="api.CharitiesRegions">
+          <NavigationPropertyBinding Path="charity" Target="Charity"/>
+          <NavigationPropertyBinding Path="region" Target="Region"/>
+        </EntitySet>
+        <EntitySet Name="CharitiesStocks" EntityType="api.CharitiesStocks">
+          <NavigationPropertyBinding Path="charities" Target="Charity"/>
+          <NavigationPropertyBinding Path="stock" Target="Stock"/>
+          <NavigationPropertyBinding Path="foodbasket" Target="FoodBasket"/>
+        </EntitySet>
+        <EntitySet Name="Charity" EntityType="api.Charity">
+          <NavigationPropertyBinding Path="users" Target="UserCharity"/>
+          <NavigationPropertyBinding Path="Regions" Target="CharitiesRegions"/>
+          <NavigationPropertyBinding Path="Stocks" Target="CharitiesStocks"/>
+          <NavigationPropertyBinding Path="Schedules" Target="Schedule"/>
+        </EntitySet>
+        <EntitySet Name="DataRequest" EntityType="api.DataRequest">
+          <NavigationPropertyBinding Path="beneficiaryID" Target="Beneficiary"/>
+        </EntitySet>
+        <EntitySet Name="FoodBasket" EntityType="api.FoodBasket">
+          <NavigationPropertyBinding Path="basket" Target="Basket"/>
+          <NavigationPropertyBinding Path="stock" Target="CharitiesStocks"/>
+        </EntitySet>
+        <EntitySet Name="Region" EntityType="api.Region">
+          <NavigationPropertyBinding Path="Charities" Target="CharitiesRegions"/>
+        </EntitySet>
+        <EntitySet Name="Schedule" EntityType="api.Schedule">
+          <NavigationPropertyBinding Path="charity" Target="Charity"/>
+          <NavigationPropertyBinding Path="Details" Target="Task"/>
+        </EntitySet>
+        <EntitySet Name="Stock" EntityType="api.Stock">
+          <NavigationPropertyBinding Path="Beneficiaries" Target="BeneficiaryStock"/>
+          <NavigationPropertyBinding Path="Charities" Target="CharitiesStocks"/>
+        </EntitySet>
+        <EntitySet Name="Task" EntityType="api.Task">
+          <NavigationPropertyBinding Path="parent" Target="Schedule"/>
+          <NavigationPropertyBinding Path="volunteer" Target="User"/>
+          <NavigationPropertyBinding Path="beneficiary" Target="Beneficiary"/>
+          <NavigationPropertyBinding Path="Food" Target="Basket"/>
+        </EntitySet>
+        <EntitySet Name="ToReview" EntityType="api.ToReview">
+          <NavigationPropertyBinding Path="beneficiaryID" Target="Beneficiary"/>
+        </EntitySet>
+        <EntitySet Name="User" EntityType="api.User">
+          <NavigationPropertyBinding Path="Charities" Target="UserCharity"/>
+        </EntitySet>
+        <EntitySet Name="UserCharity" EntityType="api.UserCharity">
+          <NavigationPropertyBinding Path="user" Target="User"/>
+          <NavigationPropertyBinding Path="charity" Target="Charity"/>
+        </EntitySet>
+      </EntityContainer>
+      <EntityType Name="Basket">
+        <Key>
+          <PropertyRef Name="BasketID"/>
+        </Key>
+        <Property Name="BasketID" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="50"/>
+        <NavigationProperty Name="stocks" Type="Collection(api.FoodBasket)" Partner="basket">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Beneficiary">
+        <Key>
+          <PropertyRef Name="beneficiaryID"/>
+        </Key>
+        <Property Name="beneficiaryID" Type="Edm.String" Nullable="false"/>
+        <NavigationProperty Name="regionID" Type="api.Region">
+          <ReferentialConstraint Property="regionID_regionID" ReferencedProperty="regionID"/>
+        </NavigationProperty>
+        <Property Name="address" Type="Edm.String" MaxLength="50"/>
+        <Property Name="postcode" Type="Edm.Int32"/>
+        <Property Name="householdSize" Type="Edm.Int32"/>
+        <Property Name="perCapitalIncome" Type="Edm.String" MaxLength="10"/>
+        <Property Name="religion" Type="Edm.String"/>
+        <Property Name="race" Type="Edm.String"/>
+        <Property Name="numWorkingAdults" Type="Edm.Int32"/>
+        <Property Name="noOfChildren" Type="Edm.Int32"/>
+        <Property Name="dietaryRestrictions" Type="Edm.String" MaxLength="100"/>
+        <Property Name="extraCharities" Type="Edm.String" MaxLength="50"/>
+        <NavigationProperty Name="Stocks" Type="Collection(api.BeneficiaryStock)" Partner="beneficiary">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="org" Type="api.Charity">
+          <ReferentialConstraint Property="org_charityID" ReferencedProperty="charityID"/>
+        </NavigationProperty>
+        <Property Name="lastDelivery" Type="Edm.Date"/>
+        <Property Name="name" Type="Edm.String" MaxLength="50"/>
+        <Property Name="regionID_regionID" Type="Edm.String"/>
+        <Property Name="org_charityID" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="BeneficiaryStock">
+        <Key>
+          <PropertyRef Name="beneficiary_beneficiaryID"/>
+          <PropertyRef Name="stock_stockID"/>
+        </Key>
+        <NavigationProperty Name="beneficiary" Type="api.Beneficiary" Partner="Stocks">
+          <ReferentialConstraint Property="beneficiary_beneficiaryID" ReferencedProperty="beneficiaryID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="stock" Type="api.Stock" Partner="Beneficiaries">
+          <ReferentialConstraint Property="stock_stockID" ReferencedProperty="stockID"/>
+        </NavigationProperty>
+        <Property Name="stockCount" Type="Edm.Int32"/>
+        <Property Name="beneficiary_beneficiaryID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_stockID" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="CharitiesRegions">
+        <Key>
+          <PropertyRef Name="charity_charityID"/>
+          <PropertyRef Name="region_regionID"/>
+        </Key>
+        <NavigationProperty Name="charity" Type="api.Charity" Partner="Regions">
+          <ReferentialConstraint Property="charity_charityID" ReferencedProperty="charityID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="region" Type="api.Region" Partner="Charities">
+          <ReferentialConstraint Property="region_regionID" ReferencedProperty="regionID"/>
+        </NavigationProperty>
+        <Property Name="charity_charityID" Type="Edm.String" Nullable="false"/>
+        <Property Name="region_regionID" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="CharitiesStocks">
+        <Key>
+          <PropertyRef Name="charities_charityID"/>
+          <PropertyRef Name="stock_stockID"/>
+          <PropertyRef Name="stock_name"/>
+        </Key>
+        <NavigationProperty Name="charities" Type="api.Charity" Partner="Stocks">
+          <ReferentialConstraint Property="charities_charityID" ReferencedProperty="charityID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="stock" Type="api.Stock" Partner="Charities">
+          <ReferentialConstraint Property="stock_stockID" ReferencedProperty="stockID"/>
+        </NavigationProperty>
+        <Property Name="stockCount" Type="Edm.Int32"/>
+        <NavigationProperty Name="foodbasket" Type="Collection(api.FoodBasket)" Partner="stock">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <Property Name="charities_charityID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_stockID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_name" Type="Edm.String" MaxLength="50" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="Charity">
+        <Key>
+          <PropertyRef Name="charityID"/>
+        </Key>
+        <Property Name="charityID" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="50"/>
+        <Property Name="address" Type="Edm.String" MaxLength="100"/>
+        <NavigationProperty Name="users" Type="Collection(api.UserCharity)" Partner="charity">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="Regions" Type="Collection(api.CharitiesRegions)" Partner="charity">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="Stocks" Type="Collection(api.CharitiesStocks)" Partner="charities">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="Schedules" Type="Collection(api.Schedule)" Partner="charity"/>
+      </EntityType>
+      <EntityType Name="DataRequest">
+        <Key>
+          <PropertyRef Name="beneficiaryID_beneficiaryID"/>
+        </Key>
+        <NavigationProperty Name="beneficiaryID" Type="api.Beneficiary">
+          <ReferentialConstraint Property="beneficiaryID_beneficiaryID" ReferencedProperty="beneficiaryID"/>
+        </NavigationProperty>
+        <Property Name="status" Type="Edm.String" MaxLength="100"/>
+        <Property Name="other" Type="Edm.String" MaxLength="100"/>
+        <Property Name="beneficiaryID_beneficiaryID" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="FoodBasket">
+        <Key>
+          <PropertyRef Name="basket_BasketID"/>
+          <PropertyRef Name="stock_charities_charityID"/>
+          <PropertyRef Name="stock_stock_stockID"/>
+          <PropertyRef Name="stock_stock_name"/>
+        </Key>
+        <NavigationProperty Name="basket" Type="api.Basket" Partner="stocks">
+          <ReferentialConstraint Property="basket_BasketID" ReferencedProperty="BasketID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="stock" Type="api.CharitiesStocks" Partner="foodbasket">
+          <ReferentialConstraint Property="stock_charities_charityID" ReferencedProperty="charities_charityID"/>
+          <ReferentialConstraint Property="stock_stock_stockID" ReferencedProperty="stock_stockID"/>
+          <ReferentialConstraint Property="stock_stock_name" ReferencedProperty="stock_name"/>
+        </NavigationProperty>
+        <Property Name="quantity" Type="Edm.Int32"/>
+        <Property Name="basket_BasketID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_charities_charityID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_stock_stockID" Type="Edm.String" Nullable="false"/>
+        <Property Name="stock_stock_name" Type="Edm.String" MaxLength="50" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="Region">
+        <Key>
+          <PropertyRef Name="regionID"/>
+        </Key>
+        <Property Name="regionID" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="20"/>
+        <NavigationProperty Name="Charities" Type="Collection(api.CharitiesRegions)" Partner="region">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Schedule">
+        <Key>
+          <PropertyRef Name="scheduleID"/>
+        </Key>
+        <Property Name="scheduleID" Type="Edm.String" Nullable="false"/>
+        <NavigationProperty Name="charity" Type="api.Charity" Partner="Schedules">
+          <ReferentialConstraint Property="charity_charityID" ReferencedProperty="charityID"/>
+        </NavigationProperty>
+        <Property Name="date" Type="Edm.Date"/>
+        <Property Name="startTime" Type="Edm.String" MaxLength="50"/>
+        <NavigationProperty Name="Details" Type="Collection(api.Task)" Partner="parent">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <Property Name="charity_charityID" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="Stock">
+        <Key>
+          <PropertyRef Name="stockID"/>
+        </Key>
+        <Property Name="stockID" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="50"/>
+        <Property Name="category" Type="Edm.String"/>
+        <NavigationProperty Name="Beneficiaries" Type="Collection(api.BeneficiaryStock)" Partner="stock">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="Charities" Type="Collection(api.CharitiesStocks)" Partner="stock">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Task">
+        <Key>
+          <PropertyRef Name="TaskID"/>
+        </Key>
+        <Property Name="TaskID" Type="Edm.String" Nullable="false"/>
+        <NavigationProperty Name="parent" Type="api.Schedule" Partner="Details">
+          <ReferentialConstraint Property="parent_scheduleID" ReferencedProperty="scheduleID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="volunteer" Type="api.User">
+          <ReferentialConstraint Property="volunteer_userID" ReferencedProperty="userID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="beneficiary" Type="api.Beneficiary">
+          <ReferentialConstraint Property="beneficiary_beneficiaryID" ReferencedProperty="beneficiaryID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="Food" Type="api.Basket">
+          <ReferentialConstraint Property="Food_BasketID" ReferencedProperty="BasketID"/>
+        </NavigationProperty>
+        <Property Name="deliverStatus" Type="Edm.String"/>
+        <Property Name="parent_scheduleID" Type="Edm.String"/>
+        <Property Name="volunteer_userID" Type="Edm.String"/>
+        <Property Name="beneficiary_beneficiaryID" Type="Edm.String"/>
+        <Property Name="Food_BasketID" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="ToReview">
+        <Key>
+          <PropertyRef Name="beneficiaryID_beneficiaryID"/>
+        </Key>
+        <NavigationProperty Name="beneficiaryID" Type="api.Beneficiary">
+          <ReferentialConstraint Property="beneficiaryID_beneficiaryID" ReferencedProperty="beneficiaryID"/>
+        </NavigationProperty>
+        <Property Name="status" Type="Edm.String" MaxLength="100"/>
+        <Property Name="other" Type="Edm.String" MaxLength="100"/>
+        <Property Name="beneficiaryID_beneficiaryID" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="User">
+        <Key>
+          <PropertyRef Name="userID"/>
+        </Key>
+        <Property Name="userID" Type="Edm.String" Nullable="false"/>
+        <Property Name="email" Type="Edm.String" MaxLength="50"/>
+        <Property Name="name" Type="Edm.String" MaxLength="50"/>
+        <Property Name="userType" Type="Edm.String"/>
+        <NavigationProperty Name="Charities" Type="Collection(api.UserCharity)" Partner="user">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="UserCharity">
+        <Key>
+          <PropertyRef Name="user_userID"/>
+          <PropertyRef Name="charity_charityID"/>
+        </Key>
+        <NavigationProperty Name="user" Type="api.User" Partner="Charities">
+          <ReferentialConstraint Property="user_userID" ReferencedProperty="userID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="charity" Type="api.Charity" Partner="users">
+          <ReferentialConstraint Property="charity_charityID" ReferencedProperty="charityID"/>
+        </NavigationProperty>
+        <Property Name="user_userID" Type="Edm.String" Nullable="false"/>
+        <Property Name="charity_charityID" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <Annotations Target="api.Basket/BasketID">
+        <Annotation Term="Common.Label" String="BasketID"/>
+      </Annotations>
+      <Annotations Target="api.Basket/name">
+        <Annotation Term="Common.Label" String="BasketName"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/beneficiaryID">
+        <Annotation Term="Common.Label" String="BeneficiaryID"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/regionID">
+        <Annotation Term="Common.Label" String="RegionID"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/address">
+        <Annotation Term="Common.Label" String="Adddress"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/postcode">
+        <Annotation Term="Common.Label" String="Postcode"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/householdSize">
+        <Annotation Term="Common.Label" String="HouseholdSize"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/perCapitalIncome">
+        <Annotation Term="Common.Label" String="PerCapitalIncome"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/religion">
+        <Annotation Term="Common.Label" String="Religion"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/race">
+        <Annotation Term="Common.Label" String="Race"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/numWorkingAdults">
+        <Annotation Term="Common.Label" String="NumWorkingAdults"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/noOfChildren">
+        <Annotation Term="Common.Label" String="NoOfChildren"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/dietaryRestrictions">
+        <Annotation Term="Common.Label" String="DietaryRestrictions"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/extraCharities">
+        <Annotation Term="Common.Label" String="extraCharities"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/org">
+        <Annotation Term="Common.Label" String="org"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/lastDelivery">
+        <Annotation Term="Common.Label" String="LastDelivery"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/name">
+        <Annotation Term="Common.Label" String="Name"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/regionID_regionID">
+        <Annotation Term="Common.Label" String="RegionID"/>
+      </Annotations>
+      <Annotations Target="api.Beneficiary/org_charityID">
+        <Annotation Term="Common.Label" String="org"/>
+      </Annotations>
+      <Annotations Target="api.BeneficiaryStock/beneficiary">
+        <Annotation Term="Common.Label" String="Beneficiary"/>
+      </Annotations>
+      <Annotations Target="api.BeneficiaryStock/stock">
+        <Annotation Term="Common.Label" String="Stock"/>
+      </Annotations>
+      <Annotations Target="api.BeneficiaryStock/stockCount">
+        <Annotation Term="Common.Label" String="StockCount"/>
+      </Annotations>
+      <Annotations Target="api.BeneficiaryStock/beneficiary_beneficiaryID">
+        <Annotation Term="Common.Label" String="Beneficiary"/>
+      </Annotations>
+      <Annotations Target="api.BeneficiaryStock/stock_stockID">
+        <Annotation Term="Common.Label" String="Stock"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesRegions/charity">
+        <Annotation Term="Common.Label" String="Charity"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesRegions/region">
+        <Annotation Term="Common.Label" String="Region"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesRegions/charity_charityID">
+        <Annotation Term="Common.Label" String="Charity"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesRegions/region_regionID">
+        <Annotation Term="Common.Label" String="Region"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/charities">
+        <Annotation Term="Common.Label" String="Charities"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/stock">
+        <Annotation Term="Common.Label" String="Stock"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/stockCount">
+        <Annotation Term="Common.Label" String="StockCount"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/foodbasket">
+        <Annotation Term="Common.Label" String="foodbasket"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/charities_charityID">
+        <Annotation Term="Common.Label" String="Charities"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/stock_stockID">
+        <Annotation Term="Common.Label" String="Stock"/>
+      </Annotations>
+      <Annotations Target="api.CharitiesStocks/stock_name">
+        <Annotation Term="Common.Label" String="Stock"/>
+      </Annotations>
+      <Annotations Target="api.Charity/charityID">
+        <Annotation Term="Common.Label" String="CharityID"/>
+      </Annotations>
+      <Annotations Target="api.Charity/name">
+        <Annotation Term="Common.Label" String="CharityName"/>
+      </Annotations>
+      <Annotations Target="api.Charity/address">
+        <Annotation Term="Common.Label" String="Address"/>
+      </Annotations>
+      <Annotations Target="api.DataRequest/beneficiaryID">
+        <Annotation Term="Common.Label" String="beneficiaryID"/>
+      </Annotations>
+      <Annotations Target="api.DataRequest/status">
+        <Annotation Term="Common.Label" String="status"/>
+      </Annotations>
+      <Annotations Target="api.DataRequest/other">
+        <Annotation Term="Common.Label" String="other"/>
+      </Annotations>
+      <Annotations Target="api.DataRequest/beneficiaryID_beneficiaryID">
+        <Annotation Term="Common.Label" String="beneficiaryID"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/basket">
+        <Annotation Term="Common.Label" String="basket"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/stock">
+        <Annotation Term="Common.Label" String="stock"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/quantity">
+        <Annotation Term="Common.Label" String="ItemQuantity"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/basket_BasketID">
+        <Annotation Term="Common.Label" String="basket"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/stock_charities_charityID">
+        <Annotation Term="Common.Label" String="stock"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/stock_stock_stockID">
+        <Annotation Term="Common.Label" String="stock"/>
+      </Annotations>
+      <Annotations Target="api.FoodBasket/stock_stock_name">
+        <Annotation Term="Common.Label" String="stock"/>
+      </Annotations>
+      <Annotations Target="api.Region/regionID">
+        <Annotation Term="Common.Label" String="RegionID"/>
+      </Annotations>
+      <Annotations Target="api.Region/name">
+        <Annotation Term="Common.Label" String="RegionName"/>
+      </Annotations>
+      <Annotations Target="api.Schedule/scheduleID">
+        <Annotation Term="Common.Label" String="ScheduleID"/>
+      </Annotations>
+      <Annotations Target="api.Schedule/charity">
+        <Annotation Term="Common.Label" String="Charity"/>
+      </Annotations>
+      <Annotations Target="api.Schedule/date">
+        <Annotation Term="Common.Label" String="Date"/>
+      </Annotations>
+      <Annotations Target="api.Schedule/startTime">
+        <Annotation Term="Common.Label" String="StartTime"/>
+      </Annotations>
+      <Annotations Target="api.Schedule/charity_charityID">
+        <Annotation Term="Common.Label" String="Charity"/>
+      </Annotations>
+      <Annotations Target="api.Stock/stockID">
+        <Annotation Term="Common.Label" String="StockID"/>
+      </Annotations>
+      <Annotations Target="api.Stock/name">
+        <Annotation Term="Common.Label" String="StockName"/>
+      </Annotations>
+      <Annotations Target="api.Stock/category">
+        <Annotation Term="Common.Label" String="Category"/>
+      </Annotations>
+      <Annotations Target="api.Task/TaskID">
+        <Annotation Term="Common.Label" String="TaskID"/>
+      </Annotations>
+      <Annotations Target="api.Task/deliverStatus">
+        <Annotation Term="Common.Label" String="DeliveryStatus"/>
+      </Annotations>
+      <Annotations Target="api.ToReview/beneficiaryID">
+        <Annotation Term="Common.Label" String="beneficiaryID"/>
+      </Annotations>
+      <Annotations Target="api.ToReview/status">
+        <Annotation Term="Common.Label" String="status"/>
+      </Annotations>
+      <Annotations Target="api.ToReview/other">
+        <Annotation Term="Common.Label" String="other"/>
+      </Annotations>
+      <Annotations Target="api.ToReview/beneficiaryID_beneficiaryID">
+        <Annotation Term="Common.Label" String="beneficiaryID"/>
+      </Annotations>
+      <Annotations Target="api.User/userID">
+        <Annotation Term="Common.Label" String="UserID"/>
+      </Annotations>
+      <Annotations Target="api.User/email">
+        <Annotation Term="Common.Label" String="Email"/>
+      </Annotations>
+      <Annotations Target="api.User/name">
+        <Annotation Term="Common.Label" String="Username"/>
+      </Annotations>
+      <Annotations Target="api.User/userType">
+        <Annotation Term="Common.Label" String="UserType"/>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

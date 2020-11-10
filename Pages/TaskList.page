@@ -1,0 +1,40 @@
+{
+	"Caption": "Tasks",
+	"Controls": [
+		{
+			"Sections": [
+				{
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"HighlightSelectedItem": false,
+					"ObjectCell": {
+						"AccessoryType": "none",
+						"Description": "{TaskID}",
+						"DetailImageIsCircular": false,
+						"Footnote": "{beneficiary/dietaryRestrictions}",
+						"OnPress": "/test/Actions/Nav_TaskDetails.action",
+						"PreserveIconStackSpacing": true,
+						"StatusText": "{deliverStatus}",
+						"Subhead": "{beneficiary/postcode}",
+						"SubstatusText": "{parent_scheduleID}",
+						"Title": "{beneficiary/name}"
+					},
+					"Target": {
+						"EntitySet": "Task",
+						"QueryOptions": "$expand=beneficiary,Food&$filter=volunteer_userID eq 'user001' and parent_scheduleID eq 'schedule001'",
+						"ReadLink": "",
+						"Service": "/test/Services/test.service"
+					},
+					"Visible": true,
+					"_Name": "SectionObjectTable0",
+					"_Type": "Section.Type.ObjectTable"
+				}
+			],
+			"_Name": "SectionedTable0",
+			"_Type": "Control.Type.SectionedTable"
+		}
+	],
+	"_Name": "TaskList",
+	"_Type": "Page"
+}

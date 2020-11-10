@@ -1,0 +1,19 @@
+{
+	"OnFailure": "/test/Actions/Failure.action",
+	"OnFailureLog": {
+		"Level": "Off",
+		"Message": ""
+	},
+	"OnSuccess": "/test/Actions/Failure.action",
+	"Properties": {
+		"TaskID": "task001",
+		"deliverStatus": "Completed"
+	},
+	"Target": {
+		"EntitySet": "Task",
+		"QueryOptions": "",
+		"ReadLink": "{@odata.readLink}",
+		"Service": "/test/Services/test.service"
+	},
+	"_Type": "Action.Type.ODataService.UpdateEntity"
+}
